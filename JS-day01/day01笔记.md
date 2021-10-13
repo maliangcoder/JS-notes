@@ -233,6 +233,11 @@ var ele = document.getElementById('id').addEventListener('click',function(){
 (function(){
     console.log('我是立即执行函数表达式')
 })()
+
+// IIFE完整写法
+;(function(){
+	函数体...
+})()
 ```
 
 ##### 2. 作用：形成了局部函数作用域,避免了直接访问变量，可以实现简单的模块化
