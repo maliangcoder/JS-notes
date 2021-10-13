@@ -235,3 +235,126 @@ var ele = document.getElementById('id').addEventListener('click',function(){
 })()
 ```
 
+##### 2. 作用：形成了局部函数作用域,避免了直接访问变量，可以实现简单的模块化
+
+```
+// 最早的模块化实现方案
+;(function(){
+    var money = 100;
+    window.$me = {
+        money:money;
+    }
+})()
+```
+
+### 十二、闭包
+
+###### 1. 闭包的形成：变量的【跨作用域访问】，便形成了闭包；
+
+###### 2. 闭包是什么？【函数】以及【函数内部跨作用域所能访问的变量】
+
+###### 3. 闭包使得函数内部能够访问函数创建时所处作用域的变量
+
+```
+/* 一个简单的闭包 */
+
+let money = 500;
+function spendMoney(){
+    console.log(money) // 数钱
+    money -= 100; // 花钱
+}
+
+spendMoney() // 500
+```
+
+### 十三、闭包的常见使用场景-嵌套函数中使用闭包
+
+###### 1. 父包含子，子访问父，最后再把子函数return或者挂载到window
+
+```
+/* 嵌套函数中使用闭包 */
+function mom(){
+    let money = 500;
+    function spendMoney(){ // mom的函数作用域
+        console.log(money) // 花钱
+        money -= 100; // 花钱
+    }
+    return spendMoney
+    /* 挂到window上 */
+    //window.spendMoney = spendMoney;
+}
+mom();
+```
+
+### 十四、IIFE中使用闭包
+
+###### 1. 闭包使得跨作用域访问的变量，不被销毁
+
+```
+// 需求：实现永不重复的计数器，需要一个函数，调用它，计数器+1，初始值100
+
+cosnt getNum = (function(){
+    let num = 100;  // 变量泄露，num会被释放么？
+    return function(){
+        return num++
+    }
+})()
+console.log(getNum()) //100
+console.log(getNum()) //101
+```
+
+### 十五、闭包解决for循环定时器问题
+
+```
+// 闭包解决for循环定时器问题
+
+for(var i = 0; i < 5; i++){
+    window.setTimeout(() =>{
+        console.log(i) // 此时的i访问的是全局作用域上的i就是window上的i
+    },1000)
+}
+
+// ES6解决此问题 利用ES6中的let声明变量
+for(let i = 0; i < 5; i++){
+    setTimeout(() =>{
+        console.log(i)
+    }，1000)
+}
+// 利用闭包解决此问题
+var i;
+for(var i = 0; i < 5; i++){
+    :(function(k){ // 此处的k是形参
+        window.setTimeout(() =>{
+            console.log(k)
+        },1000)
+    })(i) // 此处的i是传递的实参
+}
+```
+
+### 闭包的作用
+
+###### 1. 闭包的作用：“间接访问变量”，或者“隐藏变量”。
+
+```javascript
+// 闭包的作用
+
+;(function(){
+    let money = 2000; // 初始值
+    
+    let photo1 = '1';
+    let photo2 = '2';
+    let photo3 = '3';
+    
+    window.$key = {
+        consoleMoney(){  // 执行方法
+            console.log(money); 
+        }
+        spendMoney(){
+            money -= 100; 
+        }
+    }
+})()
+$key.consoleMoney(); // 读取
+$key.spendMoney(); // 执行函数，money为1900
+```
+
