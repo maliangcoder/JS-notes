@@ -98,6 +98,7 @@ fucntion ChessPlayer(name,sex){ // 大驼峰命名
 }
 //调用
 const yuan = new ChessPlayer('元宝'，1); // 实例对象
+yuan.sayName(); // 元宝
 ```
 
 3. 构造函数与一般函数写法的区别：
@@ -125,4 +126,42 @@ const yuan = new ChessPlayer('元宝'，1); // 实例对象
 ## 六、原型对象
 
 1. 原型对象：构造函数.prototype,它是一个【对象】，保存着被实例所共享的属性和方法。
+2. 面试-谈谈对原型对象的理解：
+   1. 函数创建时会自动有 `prototype` 属性，它是一个对象，就是原型对象，原型对象中存着被实例共享的属性和方法。
+   2. 原型对象中有constructor属性，指向构造函数
+   3. 实例对象有一个隐藏属性，`__proto__` 指向原型对象
 
+```
+/* 原型对象优化 */
+fucntion ChessPlayer(name,sex){ // 大驼峰命名
+	// 把属性和方法挂到 this 上
+	this.name = name; 
+	this.sex = sex;
+}
+// 把方法挂到原型对象上，解决方法过载的问题
+ChessPlayer.prototype.sayName = function(){
+	console.log(this.name)
+};
+yuan.prototype.sayName = hong.prototype.sayName; // true
+```
+
+## 七、原型链的形成
+
+![image-20211015000252341](C:\Users\86130\AppData\Roaming\Typora\typora-user-images\image-20211015000252341.png)
+
+## 八、理解原型链
+
+1. 谈谈对于原型链的理解
+
+   1.一个构造函数有它对应的原型，【原型】又可以【是】另一个构造函数创建出来的【实例】，它也有它所对应的原型，这种层层递进的关系形成的链式结构，就是【原型链】
+
+   2.在对象上查找标识符，会先在自己身上找，如果找不到，往原型链上找，直到再回到他Object。
+
+   
+
+## 九、this的前6种指向
+
+1. 全局中 => window对象
+2. 一般函数中 => 【调用者】，谁调用就指向谁
+3. 对象方法张 => 【调用者】，谁调用就指向谁
+4. 事件处理函数中
