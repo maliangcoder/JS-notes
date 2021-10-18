@@ -167,3 +167,72 @@ yuan.prototype.sayName = hong.prototype.sayName; // true
 4. 事件处理函数中 => 指向事件源，触发事件的元素
 5. 构造函数 => 实例对象
 6. 定时器中 => 指向 window
+
+## 十、bind()、call()、apply()
+
+1. 作用：修改this的指向
+2. bind：Function.prototype.call: 传入要改变的this以及参数列表
+
+```
+ /* bind() call()与apply() */
+ const yuan = {
+ 	name:'元宝',
+ 	sex:1,
+ 	sayName(type,num){
+ 		console.log(`我是${this.name},我擅长用${type}，我又${num}枚棋子`)
+ 	}
+ }
+ yuan.sayName('黑旗',113);
+ 
+ // 小胖
+ const pang = {
+ 	name:'小胖'，
+ 	sex：1
+ }
+ yuan.sayName.call(pang,'耍赖',118)
+```
+
+3. Function.prototype.apply:用法与call一样，传入的【参数数组】
+
+```
+yuan.sayName.apply(pang,['耍赖',18]); // 一般第二个参数传入arguments
+
+```
+
+4. Function.prototype.bind: 得到一个改变了
+
+```
+// 使用bind，得到一个新函数，函数绑定了this
+var sayPang = yuan.sayName.bind(pang) // 得到了一个函数
+```
+
+5. 谈谈对于bind、call、apply的理解与区别？
+
+   （1）首先，他们都能改变this的指向；
+
+   （2）从执行结果来看，call与apply调用函数，改变了this就会执行一次，，bind改变了this指向是得到了一个新函数（绑定了this），不会自己执行，所以需要自己调用一次
+
+   （3）传参数不同：call与bind都是传递的参数列表，apply接收两个参数，所以第二个参数一般是以数组的形式来传递
+
+## 十一、箭头函数中的this
+
+1. 箭头函数中的this指向【定义时】所在的作用域，而不是调用时
+
+```
+/* 箭头函数中的this */
+var id = 21;
+window.setTimtout(function(){
+	console.log(this.id) // 21
+},1000)
+
+function logId(){
+	console.log(this) 
+	// 箭头函数中的this是指向定义是的作用域而不是调用时
+	window.setTimeout(() =>{ // 此时还是window再调用，但是箭头函数中的this值指向他的定义时的作用域了。
+		console.log(this.id)
+	},1000)
+}
+const obj = {id:42};
+logId.call(obj)
+```
+
