@@ -35,7 +35,7 @@ console.log(user1.age) // 11 因为共用同一个内存空间，所以一个值
 1. 函数的传参，相当于把外面的变量【拷贝】给参数
 2. 传参时：
  （1）传基本类型：将传递的【值】拷贝的参数
-  （2）传引用类型：将传递的【地址】拷贝给参数
+    （2）传引用类型：将传递的【地址】拷贝给参数
 ```
  // 函数的传参
  // 基本类型，拷贝值
@@ -90,7 +90,7 @@ const user1 = {
 	age:10,
 	like:['打游戏'] // 引用类型
 }
-const user2 = Object.assign(P{},user1)
+const user2 = Object.assign({},user1)
 console.log(user2)
 
 user2.age = 11;
@@ -101,5 +101,96 @@ console.log(user1.like) // ['打游戏','睡觉']
 ## 七、JSON方法
 1. 将旧对象转成字符串
 2. 将字符串解析成新对象
-3. 优势：新旧对象互补影响
+3. 优势：新旧对象互不影响
 4. 缺点：没办法拷贝函数类型的属性（对象方法）
+```
+const user1 = {
+	name:"元宝",
+	age:10,
+	like:['打游戏']
+}
+// 1.将旧对象转成字符串
+const str = JSON.stringfly(user1);
+console.log(str)
+
+// 2.再将字符串解析成新对象
+let user2 = JSON.parse(str);
+console.log(user2)
+```
+## 八、lodash()
+1. _.cloneDeep 完美实现深拷贝
+
+## 九、typeof 类型检测
+```
+// typeof 基本类型
+	typeof('元宝') // string类型
+	typeof(10) // number类型
+	typeof(false) // boolean类型
+	typeof(undefied) // undefined类型
+	typeof(null) //object类型
+	
+	typeof(Symbol('a')) // symbol类型
+	
+	// 引用类型
+	typeof({}) // object
+	typeof([]) // object
+	
+	
+	typeof(function(){}) // function类型
+```
+typeof 检测：
+	（1）检测基本类型相对准确（string、Boolean、number、undefined、symbol）
+	（2）typeof(null) 返回的是 "object"
+	（3）检测引用类型，除函数（function），其他都是object
+## 九、instanceof
+	公式：变量 instanceof 类型(构造函数)
+	原理：检测【构造函数】的【原型】是否在【实例变量】的原型链上
+```
+// instanceof
+
+	let variable
+	variable = {};
+	variable instanceof Object // true
+	
+	variable = [];
+	variable instanceof Array // true
+	
+	variable = function(){};
+	variable instanceof Function // true
+```
+## 十、Object.prototype.toString.call()
+	借用 Object.prototype 上的 toSting() 方法，不是将数据值转成字符串，将【类型信息】以"[object Type]" 格式输出
+```
+Object.prototype.toString.call('元宝') //[object String]
+```
+## 十一、Array.isArray （只能检测数组）
+
+## 十二、ES5继承
+	子类继承父类   父类 => 子类 => 实例
+```
+// 父类 - 鱼类
+function Father(){
+	this.skill = '游泳' //技能,实例属性
+	
+}
+Father.prototype.getFatherSkill = function(){
+	console.log(this.skill)
+}
+
+// 子类 - 花鲢
+function Son(){
+	this.name = '花鲢'
+}
+
+// 子类继承父类 - 令子类原型 = 父类的实例
+Son.prototype = new Father()
+
+const lian1 = new Son() // 得到花鲢1的实例
+lian1.getFatherSkill()  // '游泳' 继承成功
+```
+## 十三、原型继承
+	最大的问题：原型上引用类型属性的数据，会被所有实例所共享，一旦数据改变，影响所有实例
+## 十四、寄生组合式继承
+	思想：
+		寄生式：通过Object.create()链接子类原型与父类原型，避免了多余的父类构造函数的执行;
+		组合式：通过调用父类构造函数，来继承【继承属性】，通过父类原型来【继承方法】;
