@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>call</title>
+</head>
+<body>
+    <script>
+
+        // 1.根据call的规则设置上下文对象，也即是this的指向
+        // 2.通过设置context的属性，将this绑定到context
+        // 3.执行绑定在context上的函数，并传递参数
+        // 4.删除临时变量并返回结果
+
+        Function.prototype.myCall = function (context,...arr){
+            // 判定上下文context是否为null或者undef
+            if(context == null || context == undefined){
+                context = window
+            }else{
+                // 如果传入的是原始值
+                context = Object(context)
+            }
+
+            const sy = Symbol('特殊变量');
+            context[sy] = this;
+            let result = context[sy](...arr);
+            
+            // 删除context上的属性
+            delete context[sy]
+            return result;
+        }
+
+        function foo(){
+            console.log(this)
+        }
+
+        var obj = {name:'kiven'}
+        foo();
+
+        foo.myCall(obj)
+
+    </script>
+</body>
+</html>

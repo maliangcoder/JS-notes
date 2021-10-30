@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apply</title>
+</head>
+
+<body>
+    <script>
+
+        Function.prototype.myApply = function (context) {
+            if (context === null || context === undefined) {
+                context = window
+            } else {
+                context = Object(context)
+            }
+
+            const sy = Symbol('特殊属性');
+            context[sy] = this;
+            let args = arguments[1];
+            let result;
+
+            // 判断是否是类数组
+            function isArrayLike(arg) {
+                if (arg && 
+                typeof arg === 'object' && // arg不为空值并且arg是一个object类型
+                isFinite(arg.length) && // arg的长度是一个有限数值
+                arg.length == Math.floor(arg.length) && //长度是整数
+                arg.length < 4294967296 // 长度小于2^32
+                ) {
+                    return true
+                }else{
+                    false
+                }
+            }
+
+            if (args) {
+                if (!Array.isArray(args) && !isArrayLike(args)) {
+                    throw new TypeError('myApply的第二个参数不是数组和类数组')
+                }else{
+                    args = Array.from(args);
+                    result = context[sy](...args)
+                }
+            }else{
+                result = context[sy]()
+            }
+
+            delete context[sy];
+            return result;
+
+        }
+
+        var obj = {
+            0:'hello',
+            1:'world',
+            length:2
+        }
+
+        Array.prototype.push.myApply(obj,['kiven','liven'])
+
+        console.log(obj)
+
+
+    </script>
+</body>
+
+</html>

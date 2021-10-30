@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bind</title>
+</head>
+<body>
+    <script>
+
+        /**
+        * 1.拷贝原函数
+        * 2.返回拷贝的原函数
+        * 3.调用拷贝的函数
+        */
+        Function.prototype.myBind = function(target,...params){
+            const thisFn = this;
+            
+            let fToBind = function(...others){
+                // 判断函数是否通过 new 关键调用
+                const isNew =  this instanceof fToBind
+                // 如果是通过new关键字调用，就把this(FToBind的实例对象)
+                const context = isNew ? this : Object(target)
+                return thisFn.call(context,...params,...others)
+            }
+
+            fToBind.prototype = Object.create(this.thisFn.prototype)
+            
+            return fToBind;
+        }
+
+        function foo(x){
+            console.log(x * x)
+        }
+        var obj = {
+            name:'kiven'
+        }
+        let bindFn =  foo.myBind(obj)
+        bindFn(2);
+
+    </script>
+</body>
+</html>

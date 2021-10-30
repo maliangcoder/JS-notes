@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        function isType(data,type){
+            const typeOjb = {
+                '[object String]' : 'string',
+                '[object Number]' : 'number',
+                '[object Array]'  : 'array',
+            }
+            let name = Object.prototype.toString.call(data)
+            let typeName = typeOjb[name]
+            return typeName === type
+        }
+
+        
+
+
+    </script>
+</body>
+</html>

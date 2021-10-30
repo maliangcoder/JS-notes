@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instanceof</title>
+</head>
+<body>
+    <script>
+        function _instanceof(L,R){
+            let l = L.__proto__;
+            let r = R.prototype;
+
+            while(true){
+                if(l === null){
+                    return false
+                }
+                if(l === r){
+                    return true
+                }
+
+                l = l.__proto__
+            }
+        }
+
+        function A(){
+            this.name = 'A';
+        }
+        function B(){
+            this.name = 'B'
+        }
+
+        function C(){
+            this.name = 'C'
+        }
+        // B 继承 A
+        B.prototype = new A()
+
+        // C 继承 B
+        C.prototype = new B()
+
+
+    </script>
+</body>
+</html>
